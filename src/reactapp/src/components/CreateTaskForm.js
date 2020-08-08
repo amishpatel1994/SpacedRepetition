@@ -7,7 +7,6 @@ const CreateTaskForm = (props) => {
   const { handleCancel } = props
   const [title, setTitle] = useState('Title')
   const [link, setLink] = useState('https://')
-  const [description, setDescription] = useState('')
   
   useEffect(() => 
     chrome.tabs.getSelected(null, function(tab){
@@ -17,7 +16,7 @@ const CreateTaskForm = (props) => {
 
 
   const handleSubmit = () => {
-    addTask({title, link, description}, props.handleSubmit)
+    addTask({title, link}, props.handleSubmit)
   }
 
   return (
@@ -40,16 +39,6 @@ const CreateTaskForm = (props) => {
           id="link"
           value={link} 
           onChange={(e) => setLink(e.target.value)} />
-      </FormGroup>
-      <FormGroup>
-        <Label for="description">Description</Label>
-        <Input 
-          type="textarea" 
-          name="description" 
-          id="description" 
-          value={description} 
-          onChange={(e) => setDescription(e.target.value)}
-        />
       </FormGroup>
       <Button className="formButtons" onClick={() => handleSubmit()} color="success">Submit</Button>
       <Button className="formButtons" onClick={handleCancel}>Cancel</Button>

@@ -4,6 +4,7 @@ import './App.css';
 import { Container, Row, Col, Button } from 'reactstrap';
 import NavBar from './components/NavBar'
 import CreateTaskForm from './components/CreateTaskForm'
+import {removeTask} from './utils'
 
 const App = () => {
   const tabs = ['Today', 'Upcoming', 'Completed Tasks']
@@ -24,6 +25,10 @@ const App = () => {
     setCreateTask(false)
     setTasks(tasks)
   }
+
+  const handleRemoveTask = (task_id) => {
+    removeTask(task_id, setTasks)
+  } 
   
   return (
     <div className="App">
@@ -47,6 +52,7 @@ const App = () => {
             Tabs={tabs} 
             activeTab={activeTab} 
             handleTabSwitch={handleTabSwitch}
+            handleRemoveTask={handleRemoveTask}
             tasks={tasks} />
           }
         </Row>
