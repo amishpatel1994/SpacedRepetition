@@ -1,0 +1,10 @@
+.createTaskForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+}
+
+.formButtons {
+  margin-bottom: 1em;
+}
