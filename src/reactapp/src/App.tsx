@@ -29,6 +29,10 @@ const App = () => {
   const handleRemoveTask = (task_id) => {
     removeTask(task_id, setTasks)
   } 
+
+  const handleCompleteTask = (task_id) => {
+    
+  }
   
   return (
     <div className="App">
@@ -53,6 +57,7 @@ const App = () => {
             activeTab={activeTab} 
             handleTabSwitch={handleTabSwitch}
             handleRemoveTask={handleRemoveTask}
+            handleCompleteTask={handleCompleteTask}
             tasks={tasks} />
           }
         </Row>

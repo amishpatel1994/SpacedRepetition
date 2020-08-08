@@ -2,8 +2,14 @@ import React, { useState } from 'react';
 import { TabContent, TabPane, Nav, NavItem, NavLink, ListGroup, ListGroupItem, ListGroupItemHeading, ButtonGroup, ListGroupItemText, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
 import classnames from 'classnames';
 import './NavBar.css'
+import {giveTaskRecommendations} from '../utils'
+
 const NavBar = (props) => {
   const {activeTab, Tabs, handleTabSwitch, handleRemoveTask, tasks } = props
+
+  const handleCompleteTask = (t_id) => {
+    console.log(giveTaskRecommendations(t_id))
+  }
 
   return (
     <div className="nav-container">
@@ -37,7 +43,7 @@ const NavBar = (props) => {
                         : <ListGroupItem className="task-list-item">
                             <ListGroupItemHeading href={task.link} tag="a" target="_blank" rel="noopener noreferrer">{task.title}</ListGroupItemHeading>
                             <ButtonGroup size="sm">
-                              <Button color="success"><span>&#10003;</span></Button>
+                              <Button color="success" onClick={() => handleCompleteTask(task.id)}><span>&#10003;</span></Button>
                               <Button color="danger" onClick={() => handleRemoveTask(task.id)}>x</Button>
                             </ButtonGroup>
                           </ListGroupItem>

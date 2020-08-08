@@ -9,17 +9,18 @@ const addTask = ({title, link}, callback) => {
     lastRevisedDate: '',
     bad_revisions: 0,
     ok_revisions: 0,
-    good_revisions: 0
+    good_revisions: 0,
+    archived: false
   }
 
   chrome.storage.local.get(['tasks'], (result) => {
     const tasks = result['tasks'] || []
     if(tasks && tasks.some(task => task.id === t_id)) {
-      return callback(tasks);
+      return callback(tasks)
     }
     tasks.push(task)
     chrome.storage.local.set({tasks}, () => {
-      return callback(tasks);
+      return callback(tasks)
     })
   })
 }
@@ -30,8 +31,40 @@ const removeTask = (id, callback) => {
     tasks = tasks.filter(task => task.id !== id) 
     
     chrome.storage.local.set({tasks}, () => {
-      return callback(tasks);
+      return callback(tasks)
     })
+  })
+}
+
+const getDateDiffInDays = (d1, d2) => {
+  const diff = new Date(d1.getTime() - d2.getTime())
+  return diff.getUTCDate() - 1
+}
+
+const giveTaskRecommendations = (id) => {
+  chrome.storage.local.get(['tasks'], (result) => {
+    let tasks = result['tasks'] || []
+    const task = tasks.find(task => task.id === id) 
+    if (!task) {
+      return
+    }    
+
+    const delayInRevision = getDateDiffInDays(new Date(task.nextRevisionDate), new Date())
+    const actualRevisionInterval = getDateDiffInDays(new Date(task.lastRevisedDate), new Date(task.nextRevisionDate))
+    let nextRevisionRecommendation = 0
+    if (actualRevisionInterval < 1) {
+      nextRevisionRecommendation = 1
+    }
+    else if (delayInRevision > actualRevisionInterval) {
+      nextRevisionRecommendation = actualRevisionInterval
+    } else {
+      nextRevisionRecommendation = Math.max(Math.pow(2, Math.floor(Math.log2(actualRevisionInterval))+1), 40)
+    }
+
+    const archive = (task.ok_revisions + task.good_revisions > 3) && actualRevisionInterval > 30
+    console.log(archive)
+    console.log(nextRevisionRecommendation)
+    return { nextRevisionRecommendation, archive }
   })
 }
 
@@ -40,5 +73,6 @@ const MD5 = (d) => {var r = M(V(Y(X(d),8*d.length)));return r.toLowerCase()};fun
 export {
   MD5,
   addTask,
-  removeTask
+  removeTask,
+  giveTaskRecommendations
 }
