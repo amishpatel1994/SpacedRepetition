@@ -17,7 +17,6 @@ const CreateTaskForm = (props) => {
 
 
   const handleSubmit = () => {
-    console.log("this gets called")
     addTask({title, link, description}, props.handleSubmit)
   }
 

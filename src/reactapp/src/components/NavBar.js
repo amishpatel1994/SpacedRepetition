@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
+import { TabContent, TabPane, Nav, NavItem, NavLink, ListGroup, ListGroupItem, ListGroupItemHeading, ButtonGroup, ListGroupItemText, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
 import classnames from 'classnames';
 import './NavBar.css'
 
 const NavBar = (props) => {
-  const {activeTab, Tabs, handleTabSwitch } = props
-
+  const {activeTab, Tabs, handleTabSwitch, tasks } = props
+  console.log(tasks)
   return (
     <div className="nav-container">
       <Nav tabs>
@@ -25,11 +25,26 @@ const NavBar = (props) => {
           }
       </Nav>
       
-      <TabContent activeTab={activeTab}>
+      <TabContent activeTab={activeTab} className="tab-content-container">
         <TabPane tabId={Tabs[0]}>
           <Row>
             <Col sm="12">
-              <h4>{Tabs[0]}</h4>
+              <ListGroup>
+                {
+                  tasks.map((task) => {
+                    return (
+                      task.link && task.link.length === 0 ?
+                        <ListGroupItem>{task.title}</ListGroupItem>
+                        : <ListGroupItem className="task-list-item">
+                            <ListGroupItemHeading href={task.link} tag="a" target="_blank" rel="noopener noreferrer">{task.title}</ListGroupItemHeading>
+                            <ButtonGroup size="sm">
+                              <Button color="success"><span>&#10003;</span></Button>
+                              <Button color="danger">x</Button>
+                            </ButtonGroup>
+                          </ListGroupItem>
+                  )})
+                }
+              </ListGroup>
             </Col>
           </Row>
         </TabPane>

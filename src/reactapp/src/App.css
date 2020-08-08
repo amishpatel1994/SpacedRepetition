@@ -1,16 +1,16 @@
 .App {
   text-align: center;
-  height: 100vh;
+  height: 500px;
   width: 500px;
   background-color: #282c34;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(10px + 1vmin);
   color: white;
   padding-top: 1em;
+  overflow-y: scroll;
 }
 
 .App-logo {
   height: 2em;
-  pointer-events: none;
 }
 
 .logo-container {

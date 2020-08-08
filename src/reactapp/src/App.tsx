@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './logo1.svg';
 import './App.css';
 import { Container, Row, Col, Button } from 'reactstrap';
@@ -8,15 +8,21 @@ import CreateTaskForm from './components/CreateTaskForm'
 const App = () => {
   const tabs = ['Today', 'Upcoming', 'Completed Tasks']
   const [activeTab, setActiveTab] = useState(tabs[0])
-  const [createTask, setCreateTask] = useState(true)
+  const [createTask, setCreateTask] = useState(false)
+  const [tasks, setTasks] = useState([])
   
+  useEffect(() => 
+    chrome.storage.local.get(['tasks'], (result) => {
+      setTasks(result['tasks'] || [])
+    }), [])
+
   const handleTabSwitch = (tab: string) => {
     setActiveTab(tab)
   }
 
-
-  const handleCreateFormSubmit = () => {
+  const handleCreateFormSubmit = (tasks) => {
     setCreateTask(false)
+    setTasks(tasks)
   }
   
   return (
@@ -40,7 +46,8 @@ const App = () => {
             <NavBar
             Tabs={tabs} 
             activeTab={activeTab} 
-            handleTabSwitch={handleTabSwitch} />
+            handleTabSwitch={handleTabSwitch}
+            tasks={tasks} />
           }
         </Row>
       </Container>

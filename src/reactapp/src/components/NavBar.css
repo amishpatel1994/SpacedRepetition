@@ -2,3 +2,12 @@
   width: 100%;
   padding: 1em;
 }
+
+.tab-content-container {
+  margin: 1em;
+}
+
+.task-list-item {
+  display: flex !important;
+  justify-content: space-between;
+}
