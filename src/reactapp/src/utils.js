@@ -1,5 +1,7 @@
 const addTask = ({title, link}, callback) => {
   const t_id = MD5(title+link)
+  console.log("This is the new task id")
+  console.log(t_id)
   const task = {
     id: t_id,
     title: title,
@@ -10,7 +12,7 @@ const addTask = ({title, link}, callback) => {
     bad_revisions: 0,
     ok_revisions: 0,
     good_revisions: 0,
-    archived: false
+    archive: false
   }
 
   chrome.storage.local.get(['tasks'], (result) => {
@@ -19,7 +21,10 @@ const addTask = ({title, link}, callback) => {
       return callback(tasks)
     }
     tasks.push(task)
+    console.log("this is the tasks")
+    
     chrome.storage.local.set({tasks}, () => {
+      console.log(tasks)
       return callback(tasks)
     })
   })
@@ -41,18 +46,20 @@ const getDateDiffInDays = (d1, d2) => {
   return diff.getUTCDate() - 1
 }
 
-const giveTaskRecommendations = (id) => {
+const giveTaskRecommendations = (id, callback) => {
   chrome.storage.local.get(['tasks'], (result) => {
     let tasks = result['tasks'] || []
     const task = tasks.find(task => task.id === id) 
     if (!task) {
       return
     }    
+    console.log("BEFORE ANY UPDATES")
+    console.log(tasks)
 
     const delayInRevision = getDateDiffInDays(new Date(task.nextRevisionDate), new Date())
     const actualRevisionInterval = getDateDiffInDays(new Date(task.lastRevisedDate), new Date(task.nextRevisionDate))
     let nextRevisionRecommendation = 0
-    if (actualRevisionInterval < 1) {
+    if (!actualRevisionInterval || actualRevisionInterval < 1) {
       nextRevisionRecommendation = 1
     }
     else if (delayInRevision > actualRevisionInterval) {
@@ -60,11 +67,29 @@ const giveTaskRecommendations = (id) => {
     } else {
       nextRevisionRecommendation = Math.max(Math.pow(2, Math.floor(Math.log2(actualRevisionInterval))+1), 40)
     }
-
+    console.log("in task tecommendation")
+    console.log(tasks)
     const archive = (task.ok_revisions + task.good_revisions > 3) && actualRevisionInterval > 30
-    console.log(archive)
-    console.log(nextRevisionRecommendation)
-    return { nextRevisionRecommendation, archive }
+    return callback(archive, nextRevisionRecommendation)
+  })
+}
+
+const updateTask = (task_id, props, callback) => {
+  chrome.storage.local.get(['tasks'], (result) => {
+
+    let tasks = result['tasks'] || []
+    let task = tasks.find((t) => t.id === task_id)
+    console.log("tasks before update")
+    console.log(tasks)
+    console.log("The tasks to be updated: ", task_id)
+    task = {...task, ...props}
+    console.log("this is the task", task)
+    console.log("these are the new props", props)
+    tasks = tasks.filter(task => task.id !== task_id) 
+    tasks.push(task)
+    chrome.storage.local.set({tasks}, () => {
+      return callback(tasks)
+    })
   })
 }
 
@@ -74,5 +99,6 @@ export {
   MD5,
   addTask,
   removeTask,
+  updateTask,
   giveTaskRecommendations
 }

@@ -58,6 +58,7 @@ const App = () => {
             handleTabSwitch={handleTabSwitch}
             handleRemoveTask={handleRemoveTask}
             handleCompleteTask={handleCompleteTask}
+            handleUpdateTasks={(tasks) => setTasks(tasks)}
             tasks={tasks} />
           }
         </Row>
