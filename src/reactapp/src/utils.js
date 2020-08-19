@@ -21,7 +21,6 @@ const addTask = ({title, link}, callback) => {
       return callback(tasks)
     }
     tasks.push(task)
-    console.log("this is the tasks")
     
     chrome.storage.local.set({tasks}, () => {
       console.log(tasks)
@@ -53,8 +52,6 @@ const giveTaskRecommendations = (id, callback) => {
     if (!task) {
       return
     }    
-    console.log("BEFORE ANY UPDATES")
-    console.log(tasks)
 
     const delayInRevision = getDateDiffInDays(new Date(task.nextRevisionDate), new Date())
     const actualRevisionInterval = getDateDiffInDays(new Date(task.lastRevisedDate), new Date(task.nextRevisionDate))
@@ -65,10 +62,9 @@ const giveTaskRecommendations = (id, callback) => {
     else if (delayInRevision > actualRevisionInterval) {
       nextRevisionRecommendation = actualRevisionInterval
     } else {
-      nextRevisionRecommendation = Math.max(Math.pow(2, Math.floor(Math.log2(actualRevisionInterval))+1), 40)
+      nextRevisionRecommendation = Math.min(Math.pow(2, Math.floor(Math.log1p(actualRevisionInterval))+1), 40)
     }
-    console.log("in task tecommendation")
-    console.log(tasks)
+
     const archive = (task.ok_revisions + task.good_revisions > 3) && actualRevisionInterval > 30
     return callback(archive, nextRevisionRecommendation)
   })
