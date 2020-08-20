@@ -1,7 +1,6 @@
 const addTask = ({title, link}, callback) => {
   const t_id = MD5(title+link)
-  console.log("This is the new task id")
-  console.log(t_id)
+
   const task = {
     id: t_id,
     title: title,
@@ -25,7 +24,6 @@ const addTask = ({title, link}, callback) => {
     
     // eslint-disable-next-line no-undef
     chrome.storage.local.set({tasks}, () => {
-      console.log(tasks)
       return callback(tasks)
     })
   })
@@ -81,12 +79,7 @@ const updateTask = (task_id, props, callback) => {
 
     let tasks = result['tasks'] || []
     let task = tasks.find((t) => t.id === task_id)
-    console.log("tasks before update")
-    console.log(tasks)
-    console.log("The tasks to be updated: ", task_id)
     task = {...task, ...props}
-    console.log("this is the task", task)
-    console.log("these are the new props", props)
     tasks = tasks.filter(task => task.id !== task_id) 
     tasks.push(task)
     // eslint-disable-next-line no-undef
