@@ -6,6 +6,4 @@ Spaced repetition is a technique used by many where you revisit the concepts mul
 
 This chrome extension can be used for anything and everything! You read an interesting article or informative blog that you want to remember long term? Simply add a task to this extension and review it a few times so that the information gets stored in the long term memory!
 
-This code is also open source so please feel free to check it out at https://github.com/amishpatel1994/SpacedRepetition and contribute :D! Thanks in advance.
-
 I hope the extension helps your life! Please post any feedback you may have as github issue and I'll look into it ASAP. 
