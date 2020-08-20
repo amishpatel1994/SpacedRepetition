@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import './CreateTaskForm.css'
 import { addTask } from '../utils'
 
@@ -7,8 +7,8 @@ const CreateTaskForm = (props) => {
   const { handleCancel } = props
   const [title, setTitle] = useState('Title')
   const [link, setLink] = useState('https://')
-  
   useEffect(() => 
+    // eslint-disable-next-line no-undef
     chrome.tabs.getSelected(null, function(tab){
       setTitle(tab.title)
       setLink(tab.url)

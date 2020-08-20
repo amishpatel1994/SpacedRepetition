@@ -1,4 +1,3 @@
-const { CheckerPlugin } = require('awesome-typescript-loader');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { optimize } = require('webpack');
 const { join } = require('path');
@@ -13,8 +12,8 @@ module.exports = {
   mode: process.env.NODE_ENV,
   devtool: 'inline-source-map',
   entry: {
-    contentscript: join(__dirname, 'src/contentscript/contentscript.ts'),
-    background: join(__dirname, 'src/background/background.ts'),
+    contentscript: join(__dirname, 'src/contentscript/contentscript.js'),
+    background: join(__dirname, 'src/background/background.js'),
   },
   output: {
     path: join(__dirname, 'dist'),
@@ -24,8 +23,6 @@ module.exports = {
     rules: [
       {
         exclude: /node_modules/,
-        test: /\.ts?$/,
-        use: 'awesome-typescript-loader?{configFileName: "tsconfig.json"}',
       },
       {
         test: /\.scss$/,
@@ -34,7 +31,6 @@ module.exports = {
     ],
   },
   plugins: [
-    new CheckerPlugin(),
     ...prodPlugins,
     new MiniCssExtractPlugin({
       filename: '[name].css',
@@ -42,6 +38,6 @@ module.exports = {
     }),
   ],
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.js'],
   },
 };

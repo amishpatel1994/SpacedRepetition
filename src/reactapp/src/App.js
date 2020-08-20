@@ -6,6 +6,8 @@ import NavBar from './components/NavBar'
 import CreateTaskForm from './components/CreateTaskForm'
 import {removeTask} from './utils'
 
+/* global chrome */
+
 const App = () => {
   const tabs = ['Today', 'Upcoming', 'Completed Tasks']
   const [activeTab, setActiveTab] = useState(tabs[0])
@@ -17,7 +19,7 @@ const App = () => {
       setTasks(result['tasks'] || [])
     }), [])
 
-  const handleTabSwitch = (tab: string) => {
+  const handleTabSwitch = (tab) => {
     setActiveTab(tab)
   }
 

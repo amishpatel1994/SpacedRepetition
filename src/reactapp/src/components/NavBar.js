@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { TabContent, TabPane, Nav, NavItem, NavLink, ListGroup, ListGroupItem, ListGroupItemHeading, ButtonGroup, Modal, ModalHeader, ModalBody, ModalFooter, Label, Input, Badge,ListGroupItemText, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
+import { TabContent, TabPane, Nav, NavItem, NavLink, ListGroup, ListGroupItem, ListGroupItemHeading, ButtonGroup, 
+  Modal, ModalHeader, ModalBody, ModalFooter, Label, Input, Badge, Button, Row, Col } from 'reactstrap';
 import classnames from 'classnames';
 import './NavBar.css'
 import {giveTaskRecommendations, updateTask} from '../utils'
-import NextIntervalModal from './NextIntervalModal'
 
 const NavBar = (props) => {
   const {activeTab, Tabs, handleTabSwitch, handleRemoveTask, tasks, handleUpdateTasks } = props
@@ -19,7 +19,7 @@ const NavBar = (props) => {
     setArchiveTask(archive)
   }
   const handleCompleteTask = (t_id) => {
-    const nextRecom = giveTaskRecommendations(t_id, handleRecommendation)
+    giveTaskRecommendations(t_id, handleRecommendation)
     setCurrentTask(t_id)
   }
 
@@ -49,7 +49,7 @@ const NavBar = (props) => {
       <Modal isOpen={nextIntervalModal} toggle={toggleNextIntervalModal}>
         <ModalHeader toggle={toggleNextIntervalModal}>Set up your Next Review!</ModalHeader>
         <ModalBody>
-    <p>Our recommendation is to { archiveTask ? 'archive this task. You nailed it!' : `review in ${nextRevisionRecommendation} ${nextRevisionRecommendation == 1 ? 'day' : 'days'}` }</p>
+    <p>Our recommendation is to { archiveTask ? 'archive this task. You nailed it!' : `review in ${nextRevisionRecommendation} ${nextRevisionRecommendation === 1 ? 'day' : 'days'}` }</p>
           <Label for="nextRevisionRecommendation">Days till next review</Label>
           <Input 
             type="text" 
@@ -93,12 +93,15 @@ const NavBar = (props) => {
               <ListGroup>
                 {
                   tasks.filter((task) => task.archive === false && new Date(task.nextRevisionDate).getTime() < new Date().getTime() )
+                    .sort((task1, task2) => {return new Date(task1.nextRevisionDate) - new Date(task2.nextRevisionDate)})
                     .map((task) => {
                     return (
-                      task.link && task.link.length === 0 ?
-                        <ListGroupItem className="task-list-item">{task.title}</ListGroupItem>
-                        : <ListGroupItem className="task-list-item">
-                            <ListGroupItemHeading href={task.link} tag="a" target="_blank" rel="noopener noreferrer">{task.title}</ListGroupItemHeading>
+                          <ListGroupItem className="task-list-item">
+                            <Badge className="date-badge" color="secondary">{new Date(task.nextRevisionDate).toDateString()}</Badge>
+                            { task.link.length === 0 ?
+                              <ListGroupItemHeading tag="span">{task.title}</ListGroupItemHeading>
+                            : <ListGroupItemHeading href={task.link} tag="a" target="_blank" rel="noopener noreferrer">{task.title}</ListGroupItemHeading>
+                           }
                             <ButtonGroup size="sm">
                               <Button color="success" onClick={() => handleCompleteTask(task.id)}><span>&#10003;</span></Button>
                               {renderNextIntervalModal()}
@@ -117,19 +120,20 @@ const NavBar = (props) => {
               <ListGroup>
                 {
                   tasks.filter((task) => task.archive === false && new Date(task.nextRevisionDate).getTime() >= new Date().getTime() )
-                    .map((task) => {
-                    return (
-                      task.link && task.link.length === 0 ?
-                      <ListGroupItem className="task-list-item">{task.title}<Badge className="date-badge" color="secondary">{new Date(task.nextRevisionDate).toLocaleDateString()}</Badge></ListGroupItem>
-                        : <ListGroupItem className="task-list-item">
-                            <Badge className="date-badge" color="secondary">{new Date(task.nextRevisionDate).toLocaleDateString()}</Badge>
-                            <ListGroupItemHeading href={task.link} tag="a" target="_blank" rel="noopener noreferrer">{task.title}
-                            </ListGroupItemHeading>
-                            <ButtonGroup size="sm">
-                              <Button color="danger" onClick={() => handleRemoveTask(task.id)}>x</Button>
-                            </ButtonGroup>
-                          </ListGroupItem>
-                  )})
+                  .sort((task1, task2) => {return new Date(task1.nextRevisionDate) - new Date(task2.nextRevisionDate)})
+                  .map((task) => {
+                  return (
+                        <ListGroupItem className="task-list-item">
+                          <Badge className="date-badge" color="secondary">{new Date(task.nextRevisionDate).toDateString()}</Badge>
+                          { task.link.length === 0 ?
+                            <ListGroupItemHeading tag="span">{task.title}</ListGroupItemHeading>
+                          : <ListGroupItemHeading href={task.link} tag="a" target="_blank" rel="noopener noreferrer">{task.title}</ListGroupItemHeading>
+                         }
+                          <ButtonGroup size="sm">
+                            <Button color="danger" onClick={() => handleRemoveTask(task.id)}>x</Button>
+                          </ButtonGroup>
+                        </ListGroupItem>
+                )})
                 }
               </ListGroup>
             </Col>
