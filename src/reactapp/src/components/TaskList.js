@@ -107,7 +107,7 @@ const TaskList = (props) => {
       {
         getTaskForTab().map((task) => {
           return (
-                <ListGroupItem className="task-list-item">
+                <ListGroupItem className="task-list-item" key={task.title}>
                   <Badge className="date-badge" color="secondary">{new Date(task.nextRevisionDate).toDateString()}</Badge>
                   { task.link.length === 0 ?
                     <ListGroupItemHeading tag="span">{task.title}</ListGroupItemHeading>

@@ -13,7 +13,7 @@ const NavBar = (props) => {
           {
             Tabs.map(tab => {
               return (
-                <NavItem>
+                <NavItem key={tab}>
                   <NavLink
                     className={classnames({ active: activeTab === tab })}
                     onClick={() => { handleTabSwitch(tab) }}
