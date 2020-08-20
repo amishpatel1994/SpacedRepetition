@@ -53,7 +53,7 @@ const TaskList = (props) => {
   const toggleRemoveTaskModal = () => setRemoveTaskModal(!removeTaskModal);
 
   const getTaskForTab = () => {
-    if (tab === "Today") {
+    if (tab === "To Do") {
       return tasks.filter((task) => task.archive === false && new Date(task.nextRevisionDate).getTime() < new Date().getTime() )
       .sort((task1, task2) => {return new Date(task1.nextRevisionDate) - new Date(task2.nextRevisionDate)})
     } else if (tab === "Upcoming") {

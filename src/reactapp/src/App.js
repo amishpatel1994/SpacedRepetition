@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import logo from './logo1.svg';
+import logo from './logo128.png';
 import './App.css';
 import { Container, Row, Col, Button } from 'reactstrap';
 import NavBar from './components/NavBar'
@@ -9,7 +9,7 @@ import {removeTask} from './utils'
 /* global chrome */
 
 const App = () => {
-  const tabs = ['Today', 'Upcoming', 'Completed Tasks']
+  const tabs = ['To Do', 'Upcoming', 'Archive']
   const [activeTab, setActiveTab] = useState(tabs[0])
   const [createTask, setCreateTask] = useState(false)
   const [tasks, setTasks] = useState([])
